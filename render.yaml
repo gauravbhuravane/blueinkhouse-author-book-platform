@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: blueinkhouse-django
+    env: python
+    region: oregon
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+    startCommand: "gunicorn blueinkhouse.wsgi:application"
+    envVars:
+      - key: DEBUG
+        value: False
