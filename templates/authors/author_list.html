@@ -1,56 +1,75 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h4>Author List</h4>
+<div class="table-container">
+  <div class="table-header">
+    <h4>
+      <span class="icon-circle">
+        <i class="fas fa-users"></i>
+      </span>
+      Author List
+    </h4>
+  </div>
 
-<table class="table table-striped table-bordered mt-3">
-  <thead>
-    <tr>
-      <th>Image</th>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Status</th>
-      <th>Number of Books</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for author in authors %}
-    <tr>
-      <td>
-        {% if author.profile_image %}
-          <img src="{{ author.profile_image.url }}"
-               alt="{{ author.name }}"
-               style="height:50px; width:50px; object-fit:cover; border-radius:50%;">
-        {% else %}
-          -
-        {% endif %}
-      </td>
-      <td>{{ author.name }}</td>
-      <td>{{ author.email }}</td>
-      <td>
-        {% if author.status == "approved" %}
-          <span class="badge bg-success">Approved</span>
-        {% else %}
-          <span class="badge bg-warning text-dark">Pending</span>
-        {% endif %}
-      </td>
-      <td>{{ author.number_of_books }}</td>
-      <td>
-        {% if author.status != "approved" %}
-          <a href="{% url 'approve_author' author.id %}" class="btn btn-sm btn-success">
-            Approve
-          </a>
-        {% else %}
-          -
-        {% endif %}
-      </td>
-    </tr>
-    {% empty %}
-    <tr>
-      <td colspan="6" class="text-center">No authors found</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+  <table class="table">
+    <thead>
+      <tr>
+        <th><i class="fas fa-image"></i> Image</th>
+        <th><i class="fas fa-user"></i> Name</th>
+        <th><i class="fas fa-envelope"></i> Email</th>
+        <th><i class="fas fa-check-circle"></i> Status</th>
+        <th><i class="fas fa-book"></i> Books</th>
+        <th><i class="fas fa-cog"></i> Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for author in authors %}
+      <tr class="animate-in">
+        <td>
+          {% if author.profile_image %}
+            <img src="{{ author.profile_image.url }}"
+                 alt="{{ author.name }}"
+                 class="author-image">
+          {% else %}
+            <div style="width:50px;height:50px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;">
+              {{ author.name|first|upper }}
+            </div>
+          {% endif %}
+        </td>
+        <td><strong>{{ author.name }}</strong></td>
+        <td>{{ author.email }}</td>
+        <td>
+          {% if author.status == "approved" %}
+            <span class="badge bg-success">
+              <i class="fas fa-check"></i> Approved
+            </span>
+          {% else %}
+            <span class="badge bg-warning text-dark">
+              <i class="fas fa-clock"></i> Pending
+            </span>
+          {% endif %}
+        </td>
+        <td><strong>{{ author.number_of_books }}</strong></td>
+        <td>
+          {% if author.status != "approved" %}
+            <a href="{% url 'approve_author' author.id %}" class="btn btn-sm btn-success">
+              <i class="fas fa-check"></i> Approve
+            </a>
+          {% else %}
+            <span class="text-muted">-</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6" class="empty-state">
+          <i class="fas fa-user-slash"></i>
+          <p class="mb-0"><strong>No authors found</strong></p>
+          <p class="text-muted small">Start by adding your first author!</p>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}
